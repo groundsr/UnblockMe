@@ -8,7 +8,7 @@ using UnblockMe.Data;
 
 namespace UnblockMe.Data.Migrations
 {
-    [DbContext(typeof(UnblockMeContext))]
+    //[DbContext(typeof(UnblockMeContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

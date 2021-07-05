@@ -1,65 +1,40 @@
 ﻿@model IEnumerable<UnblockMe.Models.Car>
 
-@{
-    ViewData["Title"] = "Index";
-}
+    <div class="text-center">
+        <form asp-controller="Car" asp-action="Index"
+              id="searchString" method="get" style="display: inline-block;max-width:300px; margin-top: 40px">
+            <div class="input-group rounded">
+                <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+                       aria-describedby="search-addon" name="searchString" />
+                <input type="hidden" class="search-input" placeholder="Search..." name="searchString">
+                <button type="submit" class="input-group-text border-0">
+                    <i class="fa fa-search"> </i>
+                </button>
+                 
+            </div>
+        </form>
+    </div>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Maker)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Colour)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BlockedLicensePlate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BlockedByLicensePlate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Maker)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Colour)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BlockedLicensePlate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BlockedByLicensePlate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.Password)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LicensePlate">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LicensePlate">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LicensePlate">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container mt-5">
+    <div class="row">
+        <div class="card-group">
+            @foreach (var obj in Model)
+            {
+                if (obj != null)
+                {
+                    <div class="col-4 mb-5">
+                        <div class="shadow card rounded text-black-50 
+                             bg-light align-items-center justify-content-center 
+                             text-center zoom">
+                            <div class="card-body">
+                                <h3 class="card-text">@obj.Maker<span> @obj.Model</span></h3>
+                                <p class="card-text">@obj.LicensePlate</p>
+                                <a asp-route-id="@obj.LicensePlate" asp-controller="Car" asp-action="Details" class="btn btn-primary">Go to details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

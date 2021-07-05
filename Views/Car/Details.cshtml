@@ -1,0 +1,26 @@
+﻿@model UnblockMe.Models.Car
+
+    <div class="shadow card text-center">
+        <div class="card-header">
+            @Html.DisplayFor(c=> c.LicensePlate)
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Owner's details</h5>
+            
+            <p class="card-text">
+                <span>@Html.DisplayNameFor(c => c.Owner.FirstName):</span>
+                <span>
+                    @Html.DisplayFor(c => c.Owner.FirstName)
+                </span>
+            </p>
+            <p class="card-text">
+                <span>@Html.DisplayNameFor(c => c.Owner.LastName):</span>
+                <span>
+                    @Html.DisplayFor(c => c.Owner.LastName)
+                </span>
+            </p>
+
+            <h5 class="card-title">Contact</h5>
+            <p class="card-text"><span>@Html.DisplayNameFor(c => c.Owner.PhoneNumber) : </span>@Html.DisplayFor(c => c.Owner.PhoneNumber)</p>
+        </div>
+    </div>

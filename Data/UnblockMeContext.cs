@@ -10,7 +10,7 @@ using UnblockMe.Models;
 
 namespace UnblockMe.Data
 {
-    public  class UnblockMeContext : IdentityDbContext
+    public partial class UnblockMeContext : IdentityDbContext<AspNetUsers>
     {
         public UnblockMeContext()
         {
@@ -21,48 +21,118 @@ namespace UnblockMe.Data
         {
         }
 
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Car> Car { get; set; }
         public virtual DbSet<Location> Location { get; set; }
-        public virtual DbSet<User> User { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Server=DESKTOP-5KHRI9M\\SQLEXPRESS;Database=UnblockMe;Trusted_Connection=True;");
-//            }
-//        }
 
-//        protected override void OnModelCreating(ModelBuilder modelBuilder)
-//        {
-//            modelBuilder.Entity<Car>(entity =>
-//            {
-//                entity.HasKey(e => e.LicensePlate)
-//                    .HasName("PK_Car_1");
+       
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();           
+        }
 
-//                entity.HasIndex(e => e.LicensePlate)
-//                    .HasName("IX_Car");
 
-//                entity.HasOne(d => d.Owner)
-//                    .WithMany(p => p.Car)
-//                    .HasForeignKey(d => d.OwnerId)
-//                    .HasConstraintName("FK_Car_User");
-//            });
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<AspNetUsers>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedEmail)
+                    .HasName("EmailIndex");
 
-//            modelBuilder.Entity<Location>(entity =>
-//            {
-//                entity.Property(e => e.Id).ValueGeneratedNever();
-//            });
+                entity.HasIndex(e => e.NormalizedUserName)
+                    .HasName("UserNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-//            modelBuilder.Entity<User>(entity =>
-//            {
-//                entity.Property(e => e.Id).ValueGeneratedNever();
-//            });
+                entity.Property(e => e.Email).HasMaxLength(256);
 
-//            OnModelCreatingPartial(modelBuilder);
-//        }
+                entity.Property(e => e.FirstName)
+                    .HasColumnName("first_name")
+                    .HasMaxLength(20);
 
-//        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+                entity.Property(e => e.LastName)
+                    .HasColumnName("last_name")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.Pictures)
+                    .HasColumnName("pictures")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<Car>(entity =>
+            {
+                entity.HasKey(e => e.LicensePlate)
+                    .HasName("PK_Car_1");
+
+                entity.HasIndex(e => e.LicensePlate)
+                    .HasName("IX_Car");
+
+                entity.Property(e => e.LicensePlate)
+                    .HasColumnName("license_plate")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.BlockedByLicensePlate)
+                    .HasColumnName("blockedBy_license_plate")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.BlockedLicensePlate)
+                    .HasColumnName("blocked_license_plate")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Colour)
+                    .HasColumnName("colour")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Maker)
+                    .HasColumnName("maker")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Model)
+                    .HasColumnName("model")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.OwnerId)
+                    .IsRequired()
+                    .HasColumnName("owner_id")
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.Car)
+                    .HasForeignKey(d => d.OwnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Car_AspNetUsers");
+            });
+
+            modelBuilder.Entity<Location>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Lat)
+                    .HasColumnName("lat")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Lng)
+                    .HasColumnName("lng")
+                    .HasMaxLength(50);
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

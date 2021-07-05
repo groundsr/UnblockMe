@@ -1,8 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Car
+@{
+    ViewData["Title"] = "Index";
 }
 
+
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form asp-controller="Car" asp-action="Details" 
+           method="get" style="display: inline-block; max-width: 300px; margin-top: 40px">
+        <div class="input-group rounded">
+            <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+                   aria-describedby="search-addon" name="searchString" />
+            <input type="hidden" class="search-input" placeholder="Search..." name="searchString">
+            <button type="submit" class="input-group-text border-0">
+                <i class="fa fa-search"> </i>
+            </button>
+        </div>
+    </form>
 </div>
+

@@ -9,7 +9,7 @@ using UnblockMe.Data;
 
 namespace UnblockMe.Data.Migrations
 {
-    [DbContext(typeof(UnblockMeContext))]
+    //[DbContext(typeof(UnblockMeContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
