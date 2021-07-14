@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -23,7 +24,7 @@ namespace UnblockMe.Data
 
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Car> Car { get; set; }
-        public virtual DbSet<Location> Location { get; set; }
+        public virtual DbSet<StarRating> StarRating { get; set; }
 
 
        
@@ -69,6 +70,7 @@ namespace UnblockMe.Data
                     .HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
+                
             });
 
             modelBuilder.Entity<Car>(entity =>
@@ -81,15 +83,16 @@ namespace UnblockMe.Data
 
                 entity.Property(e => e.LicensePlate)
                     .HasColumnName("license_plate")
-                    .HasMaxLength(20);
+                    .HasMaxLength(100);
+                    
 
                 entity.Property(e => e.BlockedByLicensePlate)
                     .HasColumnName("blockedBy_license_plate")
-                    .HasMaxLength(20);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.BlockedLicensePlate)
                     .HasColumnName("blocked_license_plate")
-                    .HasMaxLength(20);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Colour)
                     .HasColumnName("colour")
@@ -102,6 +105,12 @@ namespace UnblockMe.Data
                 entity.Property(e => e.Model)
                     .HasColumnName("model")
                     .HasMaxLength(20);
+                entity.Property(e => e.lat)
+                    .HasColumnName("Lat")
+                    .HasColumnType("Float");
+                entity.Property(e => e.lng)
+                    .HasColumnName("Lng")
+                    .HasColumnType("Float"); ;
 
                 entity.Property(e => e.OwnerId)
                     .IsRequired()
@@ -115,20 +124,7 @@ namespace UnblockMe.Data
                     .HasConstraintName("FK_Car_AspNetUsers");
             });
 
-            modelBuilder.Entity<Location>(entity =>
-            {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Lat)
-                    .HasColumnName("lat")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Lng)
-                    .HasColumnName("lng")
-                    .HasMaxLength(50);
-            });
+            
 
             OnModelCreatingPartial(modelBuilder);
         }

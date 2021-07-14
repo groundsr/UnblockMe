@@ -16,6 +16,8 @@ namespace UnblockMe.Models
         public string BlockedLicensePlate { get; set; }
         public string BlockedByLicensePlate { get; set; }
         public string OwnerId { get; set; }
+        public double lat { get; set; }
+        public double lng { get; set; }
 
         public virtual AspNetUsers Owner { get; set; }
     }

@@ -1,26 +1,73 @@
 ﻿@model UnblockMe.Models.Car
 
-    <div class="shadow card text-center">
-        <div class="card-header">
-            @Html.DisplayFor(c=> c.LicensePlate)
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Owner's details</h5>
-            
-            <p class="card-text">
-                <span>@Html.DisplayNameFor(c => c.Owner.FirstName):</span>
-                <span>
-                    @Html.DisplayFor(c => c.Owner.FirstName)
-                </span>
-            </p>
-            <p class="card-text">
-                <span>@Html.DisplayNameFor(c => c.Owner.LastName):</span>
-                <span>
-                    @Html.DisplayFor(c => c.Owner.LastName)
-                </span>
-            </p>
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+        }
 
-            <h5 class="card-title">Contact</h5>
-            <p class="card-text"><span>@Html.DisplayNameFor(c => c.Owner.PhoneNumber) : </span>@Html.DisplayFor(c => c.Owner.PhoneNumber)</p>
+       
+    </style>
+    <div class="shadow card text-center">
+            <div class="card-header">
+                @Html.DisplayFor(c => c.LicensePlate)
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Owner's details</h5>
+
+                <p class="card-text">
+                    <span>@Html.DisplayNameFor(c => c.Owner.FirstName):</span>
+                    <span>
+                        @Html.DisplayFor(c => c.Owner.FirstName)
+                    </span>
+                </p>
+                <p class="card-text">
+                    <span>@Html.DisplayNameFor(c => c.Owner.LastName):</span>
+                    <span>
+                        @Html.DisplayFor(c => c.Owner.LastName)
+                    </span>
+                </p>
+
+                <h5 class="card-title">Contact</h5>
+                <p class="card-text"><span>@Html.DisplayNameFor(c => c.Owner.PhoneNumber) : </span>@Html.DisplayFor(c => c.Owner.PhoneNumber)</p>
+                <p class="card-text"><span>@Html.DisplayNameFor(c => c.Owner.Email) : </span>@Html.DisplayFor(c => c.Owner.Email)</p>
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col col-12">
+                            <a class="btn btn-outline-dark" asp-route-phoneNumber="@Model.Owner.PhoneNumber
+                               " asp-controller="Car" asp-action="Send">Send an sms</a>
+                        </div>
+                        @*<div class="col col-12">
+                            <a class="btn btn-dark" data-toggle="modal" data-target="#sendModal"
+                               onclick="SendModal('@Model.')"></a>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+    
+
+    <div id="map"></div>
+    <script>
+        
+        let map;
+        let myLat = @Model.lat;
+        let myLng = @Model.lng;
+
+        function initMap() {
+            const myLatLng = { lat: myLat, lng: myLng };
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: myLatLng,
+                zoom: 14,
+            });
+
+            new google.maps.Marker({
+                position: myLatLng,
+                map,
+                title: "HelloWorld",
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjRZ8wnOsu3MmGeG8e2kA_Ugu_ppXYOVQ&callback=initMap&libraries=&v=weekly"
+            async></script>

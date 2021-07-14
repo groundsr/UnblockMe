@@ -1,21 +1,127 @@
-﻿@model Car
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@using UnblockMe.NewFolder
+@model CarsViewModel
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+@*<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+           $("#txtSearch").autocomplete({
+
+                source: '@Url.Action("Index","Search")',
+
+                minLength: 1
+
+            });
+        });
+
+    </script>*@
 
 
 
-<div class="text-center">
-    <form asp-controller="Car" asp-action="Details" 
-           method="get" style="display: inline-block; max-width: 300px; margin-top: 40px">
-        <div class="input-group rounded">
-            <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
-                   aria-describedby="search-addon" name="searchString" />
-            <input type="hidden" class="search-input" placeholder="Search..." name="searchString">
-            <button type="submit" class="input-group-text border-0">
-                <i class="fa fa-search"> </i>
-            </button>
+<div class="container mb-5 pb-5">
+    <div class="row text-center">
+        <div class="col col-lg-12">
+            <form asp-controller="Home" asp-action="Index"
+                  method="get" style="display: inline-block; max-width: 300px; margin-top: 40px">
+                <div class="input-group rounded">
+                    <input list="licensePlates" id="licensePlate" type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+                           aria-describedby="search-addon" name="searchString" />
+                    <datalist id="licensePlates">
+                        @foreach (var obj in Model.AllCars)
+                        {
+                            <option value="@obj.LicensePlate" />
+                        }
+
+                    </datalist>
+                    <button type="submit" class="input-group-text border-0">
+                        <i onclick="buttonClick()" class="fa fa-search"> </i>
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
+
+<div class="container mt-lg-5">
+    <div class="row text-center">
+        <div class="col col-6">
+            <a asp-controller="Home" data-toggle="modal" data-target="#blockunblockmodal" class="btn btn-dark" asp-action="BlockUnblockButtons">I've blocked someone</a>
+        </div>
+        <div class="col col-6">
+            <a asp-controller="Home" data-toggle="modal" data-target="#blockunblockmodal" class="btn btn-dark" asp-action="BlockUnblockButtons">I've been blocked</a>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="blockunblockmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Available Cars</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @foreach (var obj in Model.FilteredByLocation)
+                {<div class="form-check">
+                        <input onclick="setPhoneNumber('@obj.Owner.PhoneNumber')" class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">
+                            @obj.LicensePlate
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer text-center">
+                <a class="btn btn-dark" id="send">Send an sms</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="myTable" style="display:none" class="table table-striped mt-5">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">License Plate</th>
+            <th scope="col">Owner's firstName</th>
+            <th scope="col">Owner's lastName</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model.FilteredBySearch)
+        {
+            <tr>
+                <td>@obj.LicensePlate</td>
+                <td>@obj.Owner.FirstName</td>
+                <td>@obj.Owner.LastName</td>
+                <td>
+                    <a asp-route-id="@obj.LicensePlate" asp-controller="Car" asp-action="Details" class="btn btn-dark">Go to details</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+
+<script>
+    if (window.location.href.indexOf("searchString") != -1) {
+        document.getElementById("myTable").style.display = "table";
+    }
+
+    function setPhoneNumber(phoneNumber) {
+        document.getElementById("send").setAttribute("href", "/car/send?phoneNumber=" + phoneNumber);
+    }
+
+</script>
+
+
 

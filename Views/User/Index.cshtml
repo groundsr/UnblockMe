@@ -1,0 +1,172 @@
+﻿@model IEnumerable<AspNetUsers>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+
+    <table id="usersTable" class="table table-striped mt-5">
+        <thead class="thead-dark">
+            <tr>
+
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Number of cars</th>
+                <th scope="col">User Rating</th>
+                <th scope="col">Update</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+            <tr>
+
+                <td>
+                    @obj.FirstName
+                    @*<br />
+            <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="1" class="rating" mid="@obj.Id" />
+            <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="2" class="rating" mid="@obj.Id" />
+            <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="3" class="rating" mid="@obj.Id" />
+            <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="4" class="rating" mid="@obj.Id" />
+            <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="5" class="rating" mid="@obj.Id" />
+
+            (@obj.RateCount)
+            @{ if (obj.RateCount > 0)
+                {
+                    decimal a = obj.RateTotal / obj.RateCount;<span class="avr"> @a</span>} }<br />
+
+            <div class="result"></div>*@
+
+
+                </td>
+                <td>@obj.LastName</td>
+                <td>@obj.PhoneNumber</td>
+                <td>@obj.Car.Count</td>
+                <td>
+                    <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="1" class="rating" mid="@obj.Id" />
+                    <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="2" class="rating" mid="@obj.Id" />
+                    <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="3" class="rating" mid="@obj.Id" />
+                    <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="4" class="rating" mid="@obj.Id" />
+                    <img src="~/Photos/emptyStar.png" alt="Star Rating" align="middle" id="5" class="rating" mid="@obj.Id" />
+
+                    (@obj.RateCount)
+                    @{ if (obj.RateCount > 0)
+                        {
+                            decimal a = obj.RateTotal / obj.RateCount;<span class="avr"> @a</span>} }<br />
+
+                    <div class="result"></div>
+                </td>
+
+                <td>
+                    <a class="btn" data-toggle="modal" data-target="#editModal"
+                       style="background-color:whitesmoke"
+                       onclick="LoadEditModal('@obj.Id', '@obj.FirstName', '@obj.LastName'
+        , '@obj.PhoneNumber', '@obj.Car.Count')">
+                        <i class="far fa-edit" style="font-size : 12px;"></i>
+
+                    </a>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit User</h5>
+                    <button type="button" class="close text-center" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <form method="post" asp-action="Update">
+                        <input id="userId" name="Id" hidden />
+                        <div class="border p-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>FirstName</label>
+                                        </div>
+                                        <div class="col-8 text-center align-items-center justify-content-center">
+                                            <input id="userFirstName" name="FirstName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>LastName</label>
+                                        </div>
+                                        <div class="col-8 text-center align-items-center justify-content-center">
+                                            <input id="userLastName" name="LastName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>Phone Number</label>
+                                        </div>
+                                        <div class="col-8 text-center align-items-center justify-content-center">
+                                            <input id="userPhoneNumber" name="PhoneNumber" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-dark">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function LoadEditModal(Id, FirstName, LastName, PhoneNumber, NumberOfCars) {
+            $('#userId').val(Id);
+            $('#userFirstName').val(FirstName);
+            $('#userLastName').val(LastName);
+            $('#userPhoneNumber').val(PhoneNumber);
+            $('#userNumberOfCars').val(NumberOfCars);
+        }
+
+        $(function () {
+            $('#usersTable > tbody  > tr').each(function () {
+                var av = $(this).find("span.avr").text();
+                if (av != "" || av != null)
+                {
+                    var img = $(this).find("img[id='" + parseInt(av) + "']");
+                    img.attr("src", "/Photos/star.png").prevAll("img.rating").attr("src", "/Photos/star.png");
+                }
+            });
+             
+
+            $("img.rating").mouseover(function () {
+                giveRating($(this), "star.png");
+                $(this).css("cursor", "pointer");
+            });
+            $("img.rating").mouseout(function () {
+                giveRating($(this), "emptyStar.png");
+                refilRating($(this));
+            });
+
+            $("img.rating").click(function (e) {
+                $(this).css('color', 'red');
+                var url = "/User/PostRating?rating=" + parseInt($(this).attr("id")) + "&mid=" + ($(this).attr("mid"));
+                $.post(url, null, function (data) {
+                    $(e.currentTarget).closest('tr').find('div.result').text(data).css('color', 'red') // $("#result").text(data);
+                });
+            });
+        });
+        function giveRating(img, image) {
+            img.attr("src", "/Photos/" + image)
+                .prevAll("img.rating").attr("src", "/Photos/" + image);
+        }
+        function refilRating(img1)
+        {
+            var rt = $(img1).closest('tr').find("span.avr").text();
+            var img = $(img1).closest('tr').find("img[id='" + parseInt(rt) + "']");
+            img.attr("src", "/Photos/star.png").prevAll("img.rating").attr("src", "/Photos/star.png");
+        }
+    </script>

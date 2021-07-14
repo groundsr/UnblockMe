@@ -1,0 +1,22 @@
+﻿
+
+
+<form asp-action="Send" asp-controller="Car" method="post">
+    
+    <div class="container">
+        <div class="row text-center">
+            <div class="col col-6">
+                <div class="form-group">
+                    <input type="text" id="userPhoneNumber" name="to" placeholder="To" value ="@ViewBag.PhoneNumber" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="text" id="text" name="text" placeholder="Text" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

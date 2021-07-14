@@ -1,0 +1,32 @@
+﻿@model Car
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col col-lg-12">
+            <form asp-controller="Car" asp-action="Home"
+                  method="get" style="display: inline-block; max-width: 300px; margin-top: 40px">
+                <div class="input-group rounded">
+                    <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+                           aria-describedby="search-addon" id="txtSearch" name="searchString" />
+                    <input type="hidden" class="search-input" placeholder="Search..." name="searchString">
+                    <button type="submit" class="input-group-text border-0">
+                        <i class="fa fa-search"> </i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="container mt-lg-5">
+    <div class="row text-center">
+        <div class="col col-12">
+            <button type="button" class="btn btn-dark">I've blocked someone</button>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Car>
+
+<table id="myTable"  class="table table-striped mt-5">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">License Plate</th>
+            <th scope="col">Owner's firstName</th>
+            <th scope="col">Owner's lastName</th>
+            @*<th scope="col">Details</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.LicensePlate</td>
+                <td>@obj.Owner.FirstName</td>
+                <td>@obj.Owner.LastName</td>
+                @*<td>
+                    <a asp-route-id="@obj.LicensePlate" asp-controller="Car" asp-action="Details" class="btn btn-dark">Go to details</a>
+                </td>*@
+            </tr>
+        }
+
+    </tbody>
+</table>
+
